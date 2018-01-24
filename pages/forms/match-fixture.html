@@ -548,6 +548,19 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
+                <label>League</label>
+<!--                <select class="form-control select2" style="width: 100%;">-->
+               <select class="league form-control" style="width: 100%;" id="selectLeague">
+<!--                  <option selected="selected">Alabama</option>
+                  <option>Alaska</option>
+                  <option>California</option>
+                  <option>Delaware</option>
+                  <option>Tennessee</option>
+                  <option>Texas</option>
+                  <option>Washington</option>-->
+                </select>
+              </div>
+              <div class="form-group">
                 <label>HomeTeam</label>
 <!--                <select class="form-control select2" style="width: 100%;">-->
                <select class="homeTeamName form-control" style="width: 100%;">
@@ -576,7 +589,7 @@
             <div class="form-group">
                 <label>Date:</label>
                 <div class='input-group date' id='datetimepicker'>
-                    <input type='text' class="form-control" />
+                    <input type='text' class="koTime form-control" />
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -1191,10 +1204,28 @@
     //Initialize Select2 Elements
     $('.select2').select2()
 
+      $('.league').select2({
+        placeholder: 'Select an item',
+        ajax: {
+          url: 'server_side/scripts/league.php',
+          dataType: 'json',
+          delay: 250,
+          processResults: function (data) {
+            return {
+              results: data
+            };
+          },
+          cache: true
+        }
+      });
+
       $('.homeTeamName').select2({
         placeholder: 'Select an item',
         ajax: {
-          url: 'server_side/scripts/home-team.php',
+          url: function() {
+              term = $("#selectLeague").val();
+              return 'server_side/scripts/home-team.php?l=' + term;
+          },
           dataType: 'json',
           delay: 250,
           processResults: function (data) {
@@ -1258,7 +1289,8 @@
 
     //DateTime picker
     $('#datetimepicker').datetimepicker({
-        format : 'DD/MM/YYYY HH:mm'
+        format : 'DD-MM-YYYY HH:mm:ss'
+//        format : 'DD/MM/YYYY HH:mm'
     })
     
     //iCheck for checkbox and radio inputs

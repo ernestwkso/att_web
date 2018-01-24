@@ -14,15 +14,14 @@ define ("DB_PORT", "8889");
 
 $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE, DB_PORT);
 $q = $_GET['q']; 
-$l = $_GET['l']; 
 
-$sql = "SELECT home_team_id, home_team FROM match_fixture
-		WHERE home_team LIKE '%".$q."%' AND league_id LIKE '%".$l."%'"; 
+$sql = "SELECT DISTINCT league_id, league_name FROM match_fixture
+		WHERE league_name LIKE '%".$q."%'"; 
 $result = $mysqli->query($sql);
 
 $json = [];
 while($row = $result->fetch_assoc()){
-     $json[] = ['id'=>$row['home_team_id'], 'text'=>$row['home_team']];
+     $json[] = ['id'=>$row['league_id'], 'text'=>$row['league_name']];
 }
 echo json_encode($json);
 
